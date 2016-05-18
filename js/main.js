@@ -1,3 +1,9 @@
+//Student Name: Ya-Chen Lin
+//Checked devices: Galaxy Note 5 with Chrome( Work Well )
+//Checked browsers: Chrome、Edge、IE11(will block js automatically)、firefox
+//The page will show the whole list normally if javascript has been blocked
+//main.js work well on 64 or 44 contects
+
 //Put the searchBox into header if the javasript is enable
 var $searchDiv    = $('<div class="student-search">');
 var $searchInput  = $('<input placeholder="Search for students...">');
