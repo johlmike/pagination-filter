@@ -2,9 +2,9 @@
 var $searchDiv    = $('<div class="student-search">');
 var $searchInput  = $('<input placeholder="Search for students...">');
 var $searchButton = $('<button>Search</button>');
-$searchDiv.append( $searchInput );
-$searchDiv.append( $searchButton );
-$('.page-header').append( $searchDiv );
+$searchDiv.append($searchInput);
+$searchDiv.append($searchButton);
+$('.page-header').append($searchDiv);
 
 //append pagination
 var $pagination = $('<div class="pagination"></div>');
@@ -16,16 +16,9 @@ $('.page').append($pagination);
 var $correctStu;
 var $incorrectStu;
 
-
-// //replace ul and li tag with div
-// $('.student-list').replaceWith('<div class="student-list">' + $('.student-list').html() + '</div>');
-// $('.student-list li').each( function() {
-//     $(this).replaceWith('<div class="student-item cf">' + $(this).html() + '</div>');
-// });
-
 //append the error message
 var $errorMessage = $('<p style="text-align: center;">Sorry. There is no match student. Please try again.</p>');
-$('.student-list').append( $errorMessage );
+$('.student-list').append($errorMessage);
 $errorMessage.hide();
 
 //Bind event to the searchInput and searchButton with searchStu function
@@ -33,18 +26,18 @@ $searchButton.on('click', searchStu);
 $searchInput.on('input', searchStu);
 
 // create a function to let page only show ten students at a time
-function sortStu(){
+function sortStu() {
     //delete all buttons in the button-list
     $buttonList.empty();
     //append the nessary buttons to the button-list
-    for (var i = 0; i < Math.ceil( $correctStu.length / 10 ); i++) {
+    for (var i = 0; i < Math.ceil($correctStu.length / 10); i++) {
         var $anchor;
         var $button = $('<li></li>');
 
-        if( i === 0 ){
-            $anchor = $('<a class="active" href="#">' + (i+1) + '</a>');
-        } else{
-            $anchor = $('<a href="#">' + (i+1) + '</a>');
+        if (i === 0) {
+            $anchor = $('<a class="active" href="#">' + (i + 1) + '</a>');
+        } else {
+            $anchor = $('<a href="#">' + (i + 1) + '</a>');
         }
         $button.append($anchor);
         $buttonList.append($button);
@@ -53,9 +46,9 @@ function sortStu(){
     $('.button-list a').on('click', changePage);
 
     //show first ten students
-    $correctStu.each( function(index) {
+    $correctStu.each(function(index) {
         var $parent = $(this).parents('.student-item');
-        if( index < 10){
+        if (index < 10) {
             $parent.show();
         } else {
             $parent.hide();
@@ -63,52 +56,75 @@ function sortStu(){
     });
 }
 
-function changePage(){
-    console.log('changePage');
+//create the function for changing the page
+function changePage() {
+    //delete all button's active class
+    $('.button-list a').removeClass('active');
+
+    //change the button's class to active
+    $(this).addClass('active');
+
+    //get the page number
+    var pageNum = parseInt( $(this).text() );
+
+    //show ten student's according to pageNum and show others
+    $correctStu.each(function(index) {
+        var $parent = $(this).parents('.student-item');
+        if ( index >= (pageNum-1) * 10 && index < pageNum * 10 ) {
+            $parent.show();
+        } else {
+            $parent.hide();
+        }
+    });
 }
 
-//create the searchStu function
-function searchStu () {
-    console.log('Start Searching!');
+//create the function for searching students
+function searchStu() {
     //get user's string
-    var searchValue = $searchInput.val();
-    searchValue = searchValue.toLowerCase();
+    var searchValue = $searchInput.val().toLowerCase();
 
     //filter the correct students
-    $correctStu = $('.student-item h3').filter(function( index ) {
-        if( $(this).text().indexOf( searchValue ) >= 0 ){
+    $correctStu = $('.student-item h3').filter(function(index) {
+        if ($(this).text().indexOf(searchValue) >= 0) {
             return true;
         }
     });
     //filter the incorrect students
-    $incorrectStu = $('.student-item h3').filter(function( index ) {
-        if( $(this).text().indexOf( searchValue ) < 0 ){
+    $incorrectStu = $('.student-item h3').filter(function(index) {
+        if ($(this).text().indexOf(searchValue) < 0) {
             return true;
         }
     });
 
     //show correct students if they have been hidden
-    $correctStu.each( function() {
+    $correctStu.each(function() {
         var $parent = $(this).parents('.student-item');
-        if( $parent.css('display') === 'none' ){
+        if ($parent.css('display') === 'none') {
             $parent.show();
         }
     });
     //hide incorrect students if they have been display
-    $incorrectStu.each( function() {
+    $incorrectStu.each(function() {
         var $parent = $(this).parents('.student-item');
-        if( $parent.css('display') !== 'none' ){
+        if ($parent.css('display') !== 'none') {
             $parent.hide();
         }
     });
 
     //show error message if we cant find match student
-    if( $correctStu.length === 0){
+    if ($correctStu.length === 0) {
         $errorMessage.show();
     } else {
         $errorMessage.hide();
     }
+
+    //do sortStu after we found the correct students
+    sortStu();
 }
 
+//do searchStu one time when the page finish loading
 searchStu();
-sortStu();
+
+$(".animsition").animsition({
+    linkElement: '.animsition a'
+});
