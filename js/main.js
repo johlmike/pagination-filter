@@ -16,7 +16,7 @@ $('.page').append($pagination);
 var $correctStu;
 var $incorrectStu;
 
-//append the error message
+//append the error message (default: hide)
 var $errorMessage = $('<p style="text-align: center;">Sorry. There is no match student. Please try again.</p>');
 $('.student-list').append($errorMessage);
 $errorMessage.hide();
@@ -49,9 +49,9 @@ function sortStu() {
     $correctStu.each(function(index) {
         var $parent = $(this).parents('.student-item');
         if (index < 10) {
-            $parent.show();
+            $parent.slideDown();
         } else {
-            $parent.hide();
+            $parent.slideUp();
         }
     });
 }
@@ -71,9 +71,9 @@ function changePage() {
     $correctStu.each(function(index) {
         var $parent = $(this).parents('.student-item');
         if ( index >= (pageNum-1) * 10 && index < pageNum * 10 ) {
-            $parent.show();
+            $parent.slideDown();
         } else {
-            $parent.hide();
+            $parent.slideUp();
         }
     });
 }
@@ -100,22 +100,22 @@ function searchStu() {
     $correctStu.each(function() {
         var $parent = $(this).parents('.student-item');
         if ($parent.css('display') === 'none') {
-            $parent.show();
+            $parent.fadeIn();
         }
     });
     //hide incorrect students if they have been display
     $incorrectStu.each(function() {
         var $parent = $(this).parents('.student-item');
         if ($parent.css('display') !== 'none') {
-            $parent.hide();
+            $parent.fadeOut();
         }
     });
 
     //show error message if we cant find match student
     if ($correctStu.length === 0) {
-        $errorMessage.show();
+        $errorMessage.fadeIn();
     } else {
-        $errorMessage.hide();
+        $errorMessage.fadeOut();
     }
 
     //do sortStu after we found the correct students
@@ -124,7 +124,3 @@ function searchStu() {
 
 //do searchStu one time when the page finish loading
 searchStu();
-
-$(".animsition").animsition({
-    linkElement: '.animsition a'
-});
