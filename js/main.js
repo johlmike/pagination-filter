@@ -6,6 +6,11 @@ $searchDiv.append( $searchInput );
 $searchDiv.append( $searchButton );
 $('.page-header').append( $searchDiv );
 
+//append the error message which with display: none
+var $errorMessage = $('<p style="text-align: center; display= none;">Sorry. There is no match student. Please try again.</p>');
+$('.student-list').append( $errorMessage );
+
+
 //Bind event to the searchInput and searchButton with searchStu function
 $searchButton.on('click', searchStu);
 $searchInput.on('input', searchStu);
@@ -30,19 +35,25 @@ function searchStu () {
 
     //show correct students if they have been hidden
     $correctStu.each( function() {
-        if( $(this).parents('.student-item').css('display') === 'none' ){
-            $(this).parents('.student-item').fadeIn();
+        var parent = $(this).parents('.student-item');
+        if( parent.css('display') === 'none' ){
+            parent.fadeIn();
         }
     });
     //hide incorrect students if they have been display
     $incorrectStu.each( function() {
-        if( $(this).parents('.student-item').css('display') !== 'none' ){
-            $(this).parents('.student-item').fadeOut();
+        var parent = $(this).parents('.student-item');
+        if( parent.css('display') !== 'none' ){
+            parent.fadeOut();
         }
     });
 
     //show error message if we cant find match student
     if( $correctStu.length === 0){
-
+        $errorMessage.fadeIn();
+    } else {
+        $errorMessage.fadeOut();
     }
 }
+
+searchStu ();
